@@ -22,18 +22,30 @@ func main() {
 
 func calculateMinimumUpTime(times []EmployeeTimes) int {
 	var minimumTimes []int
+	minimumUpTime := 0
+	if len(times) == 1 {
+		return getMinimumUpTime(times)
+	}
 	for _, item := range times {
-		minimumUpTime := 0
 		employees := find(times, item)
-		if len(employees) != 1 {
-			maxInTime := getMaxInTime(employees)
-			maxOutTime := getMaxOutTime(employees)
-			minimumUpTime = maxOutTime - maxInTime
-
+		if len(employees) >= 1 { // não basta ser só um, tem que ser diferente dos últimos que estavam na empresa.
+			fmt.Println(employees)
+			minimumUpTime = getMinimumUpTime(employees)
+		} else {
 			minimumTimes = append(minimumTimes, minimumUpTime)
 		}
 	}
+	if len(minimumTimes) == 0 {
+		return minimumUpTime
+	}
 	return max(minimumTimes)
+}
+
+func getMinimumUpTime(employees []EmployeeTimes) int {
+	maxInTime := getMaxInTime(employees)
+	maxOutTime := getMaxOutTime(employees)
+
+	return maxOutTime - maxInTime
 }
 
 func find(slice []EmployeeTimes, item EmployeeTimes) []EmployeeTimes {
